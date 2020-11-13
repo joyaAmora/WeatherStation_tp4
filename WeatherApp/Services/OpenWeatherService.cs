@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using WeatherApp.Models;
 using WeatherApp.ViewModels;
 
@@ -8,17 +7,22 @@ namespace OpenWeatherAPI
     public class OpenWeatherService : ITemperatureService
     {
         private OpenWeatherProcessor owp;
-        public TemperatureModel LastTemp;
+        public TemperatureModel LastTemp = new TemperatureModel();
 
         public OpenWeatherService(string apiKey)
         {
             owp = OpenWeatherProcessor.Instance;
             owp.ApiKey = apiKey;
-
+            LastTemp.Temperature = GetTempAsync().Result.Temperature;
+            LastTemp.DateTime = GetTempAsync().Result.DateTime;
         }
-        public Task<TemperatureModel> GetTempAsync()
+        public async Task<TemperatureModel> GetTempAsync()
         {
-            throw new NotImplementedException();
+            TemperatureModel tm = new TemperatureModel();
+            tm.DateTime = tm.DateTime.AddSeconds(owp.GetCurrentWeatherAsync().Result.DateTime);
+            tm.Temperature = owp.GetCurrentWeatherAsync().Result.Main.Temperature;
+
+            return tm;
         }
     }
 }

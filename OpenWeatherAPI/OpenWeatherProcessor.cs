@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -43,14 +42,17 @@ namespace OpenWeatherAPI
             EndPoint = $"/weather?";
         }
 
-        
+
         /// <summary>
         /// Appel le endpoint One Call API
         /// </summary>
         /// <returns></returns>
         public async Task<OpenWeatherOneCallModel> GetOneCallAsync()
         {
-            
+            if (ApiKey == null || ApiKey == "")
+            {
+                throw new ArgumentException();
+            }
             EndPoint = $"/onecall?";
 
             /// Src : https://stackoverflow.com/a/14517976/503842
@@ -75,6 +77,10 @@ namespace OpenWeatherAPI
         /// <returns></returns>
         public async Task<OWCurrentWeaterModel> GetCurrentWeatherAsync()
         {
+            if (ApiKey == null || ApiKey == "")
+            {
+                throw new ArgumentException();
+            }
             EndPoint = $"/weather?";
 
             /// Src : https://stackoverflow.com/a/14517976/503842
@@ -96,6 +102,10 @@ namespace OpenWeatherAPI
 
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(longUrl))
             {
+                if (response == null)
+                {
+                    throw new ArgumentException();
+                }
                 if (response.IsSuccessStatusCode)
                 {
                     OpenWeatherOneCallModel result = await response.Content.ReadAsAsync<OpenWeatherOneCallModel>();
@@ -107,9 +117,13 @@ namespace OpenWeatherAPI
         }
 
         private async Task<OWCurrentWeaterModel> doCurrentWeatherCall()
-        {            
+        {
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(longUrl))
             {
+                if (response == null)
+                {
+                    throw new ArgumentException();
+                }
                 if (response.IsSuccessStatusCode)
                 {
                     OWCurrentWeaterModel result = await response.Content.ReadAsAsync<OWCurrentWeaterModel>();
