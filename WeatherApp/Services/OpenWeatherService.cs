@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using WeatherApp.Models;
 using WeatherApp.ViewModels;
 
@@ -13,16 +14,16 @@ namespace OpenWeatherAPI
         {
             owp = OpenWeatherProcessor.Instance;
             owp.ApiKey = apiKey;
-            LastTemp.Temperature = GetTempAsync().Result.Temperature;
-            LastTemp.DateTime = GetTempAsync().Result.DateTime;
         }
         public async Task<TemperatureModel> GetTempAsync()
         {
-            TemperatureModel tm = new TemperatureModel();
-            tm.DateTime = tm.DateTime.AddSeconds(owp.GetCurrentWeatherAsync().Result.DateTime);
-            tm.Temperature = owp.GetCurrentWeatherAsync().Result.Main.Temperature;
+            var result = await owp.GetCurrentWeatherAsync();
 
-            return tm;
+            long longDate = result.DateTime;
+            LastTemp.DateTime.AddSeconds(longDate).ToLocalTime();
+            LastTemp.Temperature = result.Main.Temperature;
+
+            return LastTemp;
         }
     }
 }
