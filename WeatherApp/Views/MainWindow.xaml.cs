@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OpenWeatherAPI;
 using System.Windows;
+using WeatherApp.ViewModels;
 
 namespace WeatherApp
 {
@@ -9,12 +10,13 @@ namespace WeatherApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        TemperatureViewModel vm;
         public MainWindow()
         {
             InitializeComponent();
-            AppConfiguration.GetValue("config");
-            OpenWeatherService owp = new OpenWeatherService(null);
-            owp.GetTempAsync();
+            AppConfiguration.GetValue("OWApiKey");
+
+            DataContext = vm;
         }
     }
 }

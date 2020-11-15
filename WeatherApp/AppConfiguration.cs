@@ -8,9 +8,9 @@ namespace WeatherApp
 
         public static string GetValue(string key)
         {
-            //if (configuration[key] == null)
+            if (configuration == null)
                 initConfig();
-            return key;
+            return configuration[key];
         }
 
         private static void initConfig()
