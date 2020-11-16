@@ -10,13 +10,13 @@ namespace WeatherApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        TemperatureViewModel vm;
         public MainWindow()
         {
             InitializeComponent();
-            AppConfiguration.GetValue("OWApiKey");
-
-            DataContext = vm;
+            var apiKey = AppConfiguration.GetValue("OWApiKey");
+            ITemperatureService temperatureService = new OpenWeatherService(apiKey);
+            
+            DataContext = new TemperatureViewModel(temperatureService);
         }
     }
 }
