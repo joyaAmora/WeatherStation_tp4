@@ -14,6 +14,7 @@ namespace WeatherApp
         {
             InitializeComponent();
             var apiKey = AppConfiguration.GetValue("OWApiKey");
+            ApiHelper.InitializeClient();
             ITemperatureService temperatureService = new OpenWeatherService(apiKey);
             
             DataContext = new TemperatureViewModel(temperatureService);

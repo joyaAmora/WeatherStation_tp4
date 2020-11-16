@@ -20,7 +20,7 @@ namespace OpenWeatherAPI
             var result = await owp.GetCurrentWeatherAsync();
 
             long longDate = result.DateTime;
-            LastTemp.DateTime.AddSeconds(longDate).ToLocalTime();
+            LastTemp.DateTime = new DateTime(1970,1,1,0,0,0, DateTimeKind.Utc).AddSeconds(longDate).ToLocalTime();
             LastTemp.Temperature = result.Main.Temperature;
 
             return LastTemp;
